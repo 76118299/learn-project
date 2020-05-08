@@ -113,6 +113,9 @@ public class MultipleThreadReactor {
         }
     }
 
+    /**
+     * 处理io读写
+     */
     class MultiThreadEchoHandler implements Runnable {
         Selector selector;
         SocketChannel socketChannel;
