@@ -6,7 +6,6 @@ import java.nio.ByteBuffer;
 import java.nio.channels.*;
 import java.util.Iterator;
 import java.util.Set;
-import java.util.concurrent.Executor;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.atomic.AtomicInteger;
@@ -37,9 +36,9 @@ public class MultipleThreadReactor {
         SelectionKey selectionKey = serverSocket.register(selectors[0], SelectionKey.OP_ACCEPT);
         //绑定handler
         selectionKey.attach(new AcceptHandler());
-        //第一个子反应器 负责第一个选择器
+        //第一个子反应器 负责第一个选择器 负责接收新连接
         SubReactor subReactor1 = new SubReactor(selectors[0]);
-        //第二个子反应器 负责第二选择器
+        //第二个子反应器 负责第二选择器 负责io的读写
         SubReactor subReactor2 = new SubReactor(selectors[1]);
         subReactors = new SubReactor[]{subReactor1, subReactor2};
     }
@@ -49,12 +48,6 @@ public class MultipleThreadReactor {
         new Thread(subReactors[0]).start();
         new Thread(subReactors[1]).start();
     }
-
-
-    public void run() {
-
-    }
-
 
     class SubReactor implements Runnable {
         public SubReactor(Selector selector) {
