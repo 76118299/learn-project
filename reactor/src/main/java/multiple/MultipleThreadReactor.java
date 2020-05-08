@@ -131,6 +131,7 @@ public class MultipleThreadReactor {
             this.socketChannel = socketChannel;
             //取消选择键 再设置刚兴趣的IO事件
             SelectionKey sk = socketChannel.register(selector, 0);
+            // 将handler 作为附件设置到当前channel中
             sk.attach(this);
             //向sk 注册Read就绪事件
             sk.interestOps(SelectionKey.OP_READ);
